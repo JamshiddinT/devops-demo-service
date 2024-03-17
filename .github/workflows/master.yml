@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - master  # измените в соответствии с вашей основной веткой
+      - dev
   pull_request:
     branches:
-      - master  # измените в соответствии с вашей основной веткой
+      - dev
 
 jobs:
   build:
@@ -19,25 +19,13 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-#    - name: Use Node.js 20
-#      uses: actions/setup-node@v2
-#      with:
-#        node-version: '20'
-
-#    - name: Build and test
-#      run: |
-#         Здесь выполните ваши тесты, например:
-        # npm test
-        # или
-#        python manage.py test
-
     - name: Build Docker image
       if: success()
       run: |
         docker build -t jamik94/demo_devops:latest .
     
     - name: Push Docker image
-      if: success()  # выполнится только если предыдущий шаг успешно завершился
+      if: success()
       run: |
         echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
         docker push jamik94/demo_devops:latest
